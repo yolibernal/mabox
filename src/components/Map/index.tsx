@@ -2,18 +2,30 @@ import L from "leaflet"
 import "leaflet.heat"
 import { FunctionComponent, useEffect } from "react"
 import { MapContainer, TileLayer, useMap } from "react-leaflet"
+import { useRecoilValue } from "recoil"
+import { mapCenterState, mapZoomState, pictureConfigsState } from "store"
 import { MapWrapper } from "./styles"
 
-interface Props {
+interface MapLayerProps {
   addressPoints?: L.HeatLatLngTuple[]
+  mapZoom: number
+  mapCenter: L.LatLngExpression
 }
 
-const MapLayers: FunctionComponent<Props> = ({ addressPoints = [] }) => {
+const MapLayers: FunctionComponent<MapLayerProps> = ({
+  addressPoints = [],
+  mapZoom,
+  mapCenter,
+}) => {
   const map = useMap()
 
   useEffect(() => {
     L.heatLayer(addressPoints, {}).addTo(map)
   }, [addressPoints, map])
+
+  useEffect(() => {
+    map.setView(mapCenter, mapZoom)
+  }, [mapCenter, mapZoom, map])
 
   return (
     <TileLayer
@@ -23,15 +35,30 @@ const MapLayers: FunctionComponent<Props> = ({ addressPoints = [] }) => {
   )
 }
 
-const Map: FunctionComponent<Props> = ({ addressPoints = [] }) => {
+interface Props {}
+
+const Map: FunctionComponent<Props> = () => {
+  const pictureConfigs = useRecoilValue(pictureConfigsState)
+  const mapZoom = useRecoilValue(mapZoomState)
+  const mapCenter = useRecoilValue(mapCenterState)
+
+  const addressPoints = pictureConfigs.map(
+    (pictureConfig) =>
+      [
+        pictureConfig.location.lat,
+        pictureConfig.location.lng,
+        100,
+      ] as L.HeatLatLngTuple
+  )
+
   return (
     <MapWrapper>
-      <MapContainer
-        className="map__container"
-        center={[51.505, -0.09]}
-        zoom={13}
-      >
-        <MapLayers addressPoints={addressPoints} />
+      <MapContainer center={mapCenter} zoom={mapZoom}>
+        <MapLayers
+          addressPoints={addressPoints}
+          mapZoom={mapZoom}
+          mapCenter={mapCenter}
+        />
       </MapContainer>
     </MapWrapper>
   )

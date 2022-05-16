@@ -37,6 +37,18 @@ export const AppViews: FunctionComponent = () => {
       if (!fromYear) return
       setFromYear(fromYear + 1)
     },
+    b: (e) => {
+      e.preventDefault()
+      if (!fromYear) return
+      setToYear(toYear - 1)
+      setFromYear(toYear - 1)
+    },
+    n: (e) => {
+      e.preventDefault()
+      if (!fromYear) return
+      setToYear(toYear + 1)
+      setFromYear(toYear + 1)
+    },
   })
   return (
     <>

@@ -34,7 +34,7 @@ export const Timeline: FunctionComponent<Props> = () => {
       />
       <CurrentBar
         backgroundColor={selectedColor}
-        widthPercent={cleanPercentage(bar)}
+        widthPercent={cleanPercentage(bar) || 1}
       />
     </TimelineWrapper>
   )

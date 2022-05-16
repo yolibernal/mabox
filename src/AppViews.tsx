@@ -9,6 +9,7 @@ import {
   joyStickDirectionState,
   mapBoundingBoxSizeState,
   mapCenterState,
+  mapZoomState,
   showGalleryState,
   toYearState,
 } from "store"
@@ -18,6 +19,7 @@ export const AppViews: FunctionComponent = () => {
   const showGallery = useRecoilValue(showGalleryState)
   const [toYear, setToYear] = useRecoilState(toYearState)
   const [fromYear, setFromYear] = useRecoilState(fromYearState)
+  const setMapZoom = useSetRecoilState(mapZoomState)
   const setMapCenter = useSetRecoilState(mapCenterState)
   const mapBoundingBoxSize = useRecoilValue(mapBoundingBoxSizeState)
   const [joyStickDirection, setJoyStickDirection] = useRecoilState(
@@ -81,6 +83,14 @@ export const AppViews: FunctionComponent = () => {
     Space: (e) => {
       e.preventDefault()
       setJoyStickDirection(null)
+    },
+    q: (e) => {
+      e.preventDefault()
+      setMapZoom((mapZoom) => mapZoom - 1)
+    },
+    e: (e) => {
+      e.preventDefault()
+      setMapZoom((mapZoom) => mapZoom + 1)
     },
   })
 

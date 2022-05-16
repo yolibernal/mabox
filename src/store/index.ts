@@ -42,6 +42,34 @@ export const pictureTimeRangeState = selector({
   },
 })
 
+export const selectedPicturesState = selector({
+  key: "selectedPicturesState",
+  get: ({ get }) => {
+    const mapBoundingBox = get(mapBoundingBoxState)
+    const currentYear = get(currentYearState)
+
+    let pictureConfigs = get(pictureConfigsState)
+
+    if (mapBoundingBox) {
+      pictureConfigs = pictureConfigs.filter(
+        (pictureConf) =>
+          pictureConf.location.lat > mapBoundingBox.getSouth() &&
+          pictureConf.location.lat < mapBoundingBox.getNorth() &&
+          pictureConf.location.lng > mapBoundingBox.getWest() &&
+          pictureConf.location.lng < mapBoundingBox.getEast()
+      )
+    }
+    if (currentYear) {
+      pictureConfigs = pictureConfigs.filter((pictureConf) =>
+        pictureConf.date
+          ? new Date(pictureConf.date).getFullYear() <= currentYear
+          : false
+      )
+    }
+    return pictureConfigs
+  },
+})
+
 export const showGalleryState = atom({
   key: "showGalleryState",
   default: false,

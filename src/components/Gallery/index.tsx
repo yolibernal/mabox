@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react"
 import { useRecoilValue } from "recoil"
 import {
   mapBoundingBoxState,
-  pictureConfigsState,
+  selectedPicturesState,
   showGalleryState,
 } from "store"
 
@@ -10,20 +10,15 @@ export const Gallery: FunctionComponent = () => {
   const showGallery = useRecoilValue(showGalleryState)
   const mapBoundingBox = useRecoilValue(mapBoundingBoxState)
 
-  const pictureConfigs = useRecoilValue(pictureConfigsState)
+  const selectedPictures = useRecoilValue(selectedPicturesState)
 
   const [currentIndex, setCurrentIndex] = useState(0)
 
   if (!mapBoundingBox) return null
 
-  const pictureConfigsInBound = pictureConfigs.filter(
-    (pictureConf) =>
-      pictureConf.location.lat > mapBoundingBox.getSouth() &&
-      pictureConf.location.lat < mapBoundingBox.getNorth() &&
-      pictureConf.location.lng > mapBoundingBox.getWest() &&
-      pictureConf.location.lng < mapBoundingBox.getEast()
-  )
   if (!showGallery) return null
+
+  if (selectedPictures.length === 0) return null
 
   return (
     <div>
@@ -31,7 +26,7 @@ export const Gallery: FunctionComponent = () => {
       <img
         style={{ width: "500px", height: "500px" }}
         alt=""
-        src={pictureConfigsInBound[currentIndex].path}
+        src={selectedPictures[currentIndex].path}
       />
       <div
         onClick={(e) => {
@@ -45,7 +40,7 @@ export const Gallery: FunctionComponent = () => {
         onClick={(e) => {
           e.stopPropagation()
           setCurrentIndex((currentIndex) =>
-            Math.min(pictureConfigsInBound.length - 1, currentIndex + 1)
+            Math.min(selectedPictures.length - 1, currentIndex + 1)
           )
         }}
       >

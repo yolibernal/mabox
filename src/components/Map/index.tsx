@@ -2,13 +2,14 @@ import { accessToken, styleId, tilesize, username } from "config/mapbox.config"
 import L from "leaflet"
 import "leaflet.heat"
 import { FunctionComponent, useEffect } from "react"
-import { MapContainer, TileLayer, useMap } from "react-leaflet"
+import { MapContainer, TileLayer, useMap, useMapEvents } from "react-leaflet"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import {
   mapBoundingBoxState,
   mapCenterState,
   mapZoomState,
   pictureConfigsState,
+  selectedPicturesState,
 } from "store"
 import { MapWrapper } from "./styles"
 
@@ -40,17 +41,26 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   }, [mapCenter, mapZoom, map])
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    setMapBoundingBox(map.getBounds())
+  }, [map, setMapBoundingBox, mapZoom, mapCenter])
+
+  useMapEvents({
+    dragend: () => {
       setMapCenter(map.getCenter())
       setMapZoom(map.getZoom())
       setMapBoundingBox(map.getBounds())
-    }, 0.1)
-    return () => clearInterval(interval)
-  }, [map, setMapCenter, setMapZoom, setMapBoundingBox])
-
-  useEffect(() => {
-    setMapBoundingBox(map.getBounds())
-  }, [map, setMapBoundingBox, mapZoom, mapCenter])
+    },
+    zoom: () => {
+      setMapCenter(map.getCenter())
+      setMapZoom(map.getZoom())
+      setMapBoundingBox(map.getBounds())
+    },
+    keydown: () => {
+      setMapCenter(map.getCenter())
+      setMapZoom(map.getZoom())
+      setMapBoundingBox(map.getBounds())
+    },
+  })
 
   const url = `https://api.mapbox.com/styles/v1/${username}/${styleId}/tiles/${tilesize}/{z}/{x}/{y}@2x?access_token=${accessToken}`
   return (
@@ -71,7 +81,9 @@ export const Map: FunctionComponent<Props> = () => {
   const mapZoom = useRecoilValue(mapZoomState)
   const mapCenter = useRecoilValue(mapCenterState)
 
-  const addressPoints = pictureConfigs.map(
+  const selectedPictures = useRecoilValue(selectedPicturesState)
+
+  const addressPoints = selectedPictures.map(
     (pictureConfig) =>
       [
         pictureConfig.location.lat,

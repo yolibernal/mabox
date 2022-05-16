@@ -27,8 +27,8 @@ export const toYearState = atom({
   default: new Date().getFullYear(),
 })
 
-export const pictureTimeRangeState = selector({
-  key: "pictureTimeRangeState",
+export const pictureYearRangeState = selector({
+  key: "pictureYearRangeState",
   get: ({ get }) => {
     const pictureConfigs = get(pictureConfigsState)
     const dates = pictureConfigs
@@ -38,7 +38,10 @@ export const pictureTimeRangeState = selector({
     const minPictureDate = Math.min(...dates)
     const maxPictureDate = Math.max(...dates)
 
-    return [new Date(minPictureDate), new Date(maxPictureDate)] as [Date, Date]
+    return [
+      new Date(minPictureDate).getFullYear(),
+      new Date(maxPictureDate).getFullYear(),
+    ]
   },
 })
 

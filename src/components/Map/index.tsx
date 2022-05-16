@@ -8,7 +8,6 @@ import {
   mapBoundingBoxState,
   mapCenterState,
   mapZoomState,
-  pictureConfigsState,
   selectedPicturesState,
 } from "store"
 import { MapWrapper } from "./styles"
@@ -77,7 +76,6 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
 interface Props {}
 
 export const Map: FunctionComponent<Props> = () => {
-  const pictureConfigs = useRecoilValue(pictureConfigsState)
   const mapZoom = useRecoilValue(mapZoomState)
   const mapCenter = useRecoilValue(mapCenterState)
 

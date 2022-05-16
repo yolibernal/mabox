@@ -13,10 +13,11 @@ export const Timeline: FunctionComponent<Props> = () => {
   if (currentYear) {
     const [minDate, maxDate] = pictureTimeRange
 
-    const minYear = minDate.getFullYear()
-    const maxYear = maxDate.getFullYear() + 1
+    const minPictureYear = minDate.getFullYear()
+    const maxPictureYear = maxDate.getFullYear() + 1
 
-    yearPercent = ((currentYear - minYear) / (maxYear - minYear)) * 100
+    yearPercent =
+      ((currentYear - minPictureYear) / (maxPictureYear - minPictureYear)) * 100
     yearPercent = Math.min(yearPercent, 100)
     yearPercent = Math.max(yearPercent, 0)
   }

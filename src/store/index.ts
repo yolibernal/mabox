@@ -35,10 +35,10 @@ export const pictureTimeRangeState = selector({
       .map((config) => (config.date ? Date.parse(config.date) : null))
       .filter((date) => date) as number[]
 
-    const minDate = Math.min(...dates)
-    const maxDate = Math.max(...dates)
+    const minPictureDate = Math.min(...dates)
+    const maxPictureDate = Math.max(...dates)
 
-    return [new Date(minDate), new Date(maxDate)] as [Date, Date]
+    return [new Date(minPictureDate), new Date(maxPictureDate)] as [Date, Date]
   },
 })
 

@@ -22,11 +22,6 @@ export const mapBoundingBoxState = atom<LatLngBounds | null>({
   default: null,
 })
 
-export const toYearState = atom({
-  key: "toYearState",
-  default: new Date().getFullYear(),
-})
-
 export const pictureYearRangeState = selector({
   key: "pictureYearRangeState",
   get: ({ get }) => {
@@ -45,10 +40,37 @@ export const pictureYearRangeState = selector({
   },
 })
 
+export const getMinPictureYearState = selector({
+  key: "getMinPictureYear",
+  get: ({ get }) => {
+    const pictureYearRange = get(pictureYearRangeState)
+    return pictureYearRange[0]
+  },
+})
+
+export const getMaxPictureYearState = selector({
+  key: "getMaxPictureYear",
+  get: ({ get }) => {
+    const pictureYearRange = get(pictureYearRangeState)
+    return pictureYearRange[1]
+  },
+})
+
+export const fromYearState = atom({
+  key: "fromYearState",
+  default: getMinPictureYearState,
+})
+
+export const toYearState = atom({
+  key: "toYearState",
+  default: getMaxPictureYearState,
+})
+
 export const selectedPicturesState = selector({
   key: "selectedPicturesState",
   get: ({ get }) => {
     const mapBoundingBox = get(mapBoundingBoxState)
+    const fromYear = get(fromYearState)
     const toYear = get(toYearState)
 
     let pictureConfigs = get(pictureConfigsState)
@@ -60,6 +82,13 @@ export const selectedPicturesState = selector({
           pictureConf.location.lat < mapBoundingBox.getNorth() &&
           pictureConf.location.lng > mapBoundingBox.getWest() &&
           pictureConf.location.lng < mapBoundingBox.getEast()
+      )
+    }
+    if (fromYear) {
+      pictureConfigs = pictureConfigs.filter((pictureConf) =>
+        pictureConf.date
+          ? new Date(pictureConf.date).getFullYear() >= fromYear
+          : false
       )
     }
     if (toYear) {

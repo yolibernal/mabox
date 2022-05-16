@@ -1,27 +1,41 @@
 import React, { FunctionComponent } from "react"
 import { useRecoilValue } from "recoil"
-import { pictureYearRangeState, toYearState } from "store"
+import { fromYearState, pictureYearRangeState, toYearState } from "store"
 import { CurrentBar, TimelineWrapper } from "./styles"
 
 interface Props {}
 
 export const Timeline: FunctionComponent<Props> = () => {
   const pictureYearRange = useRecoilValue(pictureYearRangeState)
+  const fromYear = useRecoilValue(fromYearState)
   const toYear = useRecoilValue(toYearState)
 
-  let yearPercent = null
-  if (toYear) {
-    const [minPictureYear, maxPictureYear] = pictureYearRange
+  const [minPictureYear, maxPictureYear] = pictureYearRange
 
-    yearPercent =
-      ((toYear - minPictureYear) / (maxPictureYear + 1 - minPictureYear)) * 100
-    yearPercent = Math.min(yearPercent, 100)
-    yearPercent = Math.max(yearPercent, 0)
+  const range = maxPictureYear - minPictureYear
+
+  const preBar = (fromYear - minPictureYear) / range
+  const bar = (toYear - minPictureYear - (fromYear - minPictureYear)) / range
+
+  const cleanPercentage = (value: number) => {
+    let percentage = value * 100
+    percentage = Math.min(percentage, 100)
+    percentage = Math.max(percentage, 0)
+    return percentage
   }
 
+  const notSelectedColor = "lightgrey"
+  const selectedColor = "green"
   return (
-    <TimelineWrapper>
-      <CurrentBar widthPercent={yearPercent != null ? yearPercent : 100} />
+    <TimelineWrapper backgroundColor={notSelectedColor}>
+      <CurrentBar
+        backgroundColor={notSelectedColor}
+        widthPercent={cleanPercentage(preBar)}
+      />
+      <CurrentBar
+        backgroundColor={selectedColor}
+        widthPercent={cleanPercentage(bar)}
+      />
     </TimelineWrapper>
   )
 }

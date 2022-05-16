@@ -28,6 +28,12 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   const setMapZoom = useSetRecoilState(mapZoomState)
   const setMapBoundingBox = useSetRecoilState(mapBoundingBoxState)
 
+  const setMapState = (map: L.Map) => {
+    setMapCenter([map.getCenter().lat, map.getCenter().lng])
+    setMapZoom(map.getZoom())
+    setMapBoundingBox(map.getBounds())
+  }
+
   useEffect(() => {
     const layer = L.heatLayer(addressPoints, {}).addTo(map)
     return () => {
@@ -45,19 +51,13 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
 
   useMapEvents({
     dragend: () => {
-      setMapCenter(map.getCenter())
-      setMapZoom(map.getZoom())
-      setMapBoundingBox(map.getBounds())
+      setMapState(map)
     },
     zoom: () => {
-      setMapCenter(map.getCenter())
-      setMapZoom(map.getZoom())
-      setMapBoundingBox(map.getBounds())
+      setMapState(map)
     },
     keydown: () => {
-      setMapCenter(map.getCenter())
-      setMapZoom(map.getZoom())
-      setMapBoundingBox(map.getBounds())
+      setMapState(map)
     },
   })
 

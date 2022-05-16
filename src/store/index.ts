@@ -14,11 +14,37 @@ export const mapZoomState = atom({
 
 export const mapCenterState = atom({
   key: "mapCenterState",
-  default: [49.0069, 8.4037] as L.LatLngExpression,
+  default: [49.0069, 8.4037] as L.LatLngTuple,
 })
 
 export const mapBoundingBoxState = atom<LatLngBounds | null>({
   key: "mapBoundingBoxState",
+  default: null,
+})
+
+export const mapBoundingBoxSizeState = selector({
+  key: "mapBoundingBoxSizeState",
+  get: ({ get }) => {
+    const mapBoundingBox = get(mapBoundingBoxState)
+    if (!mapBoundingBox) {
+      return null
+    }
+    return [
+      mapBoundingBox.getNorth() - mapBoundingBox.getSouth(),
+      mapBoundingBox.getEast() - mapBoundingBox.getWest(),
+    ] as [number, number]
+  },
+})
+
+export enum JoyStickDirection {
+  Left = "left",
+  Right = "right",
+  Up = "up",
+  Down = "down",
+}
+
+export const joyStickDirectionState = atom<JoyStickDirection | null>({
+  key: "joyStickDirectionState",
   default: null,
 })
 

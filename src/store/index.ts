@@ -22,9 +22,9 @@ export const mapBoundingBoxState = atom<LatLngBounds | null>({
   default: null,
 })
 
-export const currentDateState = atom({
-  key: "currentDateState",
-  default: null as Date | null,
+export const currentYearState = atom({
+  key: "currentYearState",
+  default: new Date().getFullYear(),
 })
 
 export const pictureTimeRangeState = selector({

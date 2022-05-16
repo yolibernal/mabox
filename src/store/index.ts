@@ -22,8 +22,8 @@ export const mapBoundingBoxState = atom<LatLngBounds | null>({
   default: null,
 })
 
-export const currentYearState = atom({
-  key: "currentYearState",
+export const toYearState = atom({
+  key: "toYearState",
   default: new Date().getFullYear(),
 })
 
@@ -46,7 +46,7 @@ export const selectedPicturesState = selector({
   key: "selectedPicturesState",
   get: ({ get }) => {
     const mapBoundingBox = get(mapBoundingBoxState)
-    const currentYear = get(currentYearState)
+    const toYear = get(toYearState)
 
     let pictureConfigs = get(pictureConfigsState)
 
@@ -59,10 +59,10 @@ export const selectedPicturesState = selector({
           pictureConf.location.lng < mapBoundingBox.getEast()
       )
     }
-    if (currentYear) {
+    if (toYear) {
       pictureConfigs = pictureConfigs.filter((pictureConf) =>
         pictureConf.date
-          ? new Date(pictureConf.date).getFullYear() <= currentYear
+          ? new Date(pictureConf.date).getFullYear() <= toYear
           : false
       )
     }

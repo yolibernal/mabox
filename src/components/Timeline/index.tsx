@@ -1,23 +1,23 @@
 import React, { FunctionComponent } from "react"
 import { useRecoilValue } from "recoil"
-import { currentYearState, pictureTimeRangeState } from "store"
+import { pictureTimeRangeState, toYearState } from "store"
 import { CurrentBar, TimelineWrapper } from "./styles"
 
 interface Props {}
 
 export const Timeline: FunctionComponent<Props> = () => {
   const pictureTimeRange = useRecoilValue(pictureTimeRangeState)
-  const currentYear = useRecoilValue(currentYearState)
+  const toYear = useRecoilValue(toYearState)
 
   let yearPercent = null
-  if (currentYear) {
+  if (toYear) {
     const [minDate, maxDate] = pictureTimeRange
 
     const minPictureYear = minDate.getFullYear()
     const maxPictureYear = maxDate.getFullYear() + 1
 
     yearPercent =
-      ((currentYear - minPictureYear) / (maxPictureYear - minPictureYear)) * 100
+      ((toYear - minPictureYear) / (maxPictureYear - minPictureYear)) * 100
     yearPercent = Math.min(yearPercent, 100)
     yearPercent = Math.max(yearPercent, 0)
   }

@@ -136,6 +136,7 @@ export const AppViews: FunctionComponent = () => {
       clearInterval(interval)
     }
   }, [joyStickDirection, setMapCenter, mapBoundingBoxSize])
+
   return (
     <>
       <Timeline />

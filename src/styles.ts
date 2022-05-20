@@ -6,4 +6,10 @@ export const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: stretch;
+  padding: 8px 30px 10px;
+`
+
+export const ContentContainer = styled.div`
+  height: 100%;
+  width: 100%;
 `

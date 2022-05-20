@@ -1,6 +1,7 @@
 import maboxLogo from "img/mabox.svg"
 import React, { FunctionComponent } from "react"
+import { LogoImage } from "./styles"
 
 export const MaboxLogo: FunctionComponent = () => {
-  return <img width={500} src={maboxLogo} />
+  return <LogoImage src={maboxLogo} />
 }

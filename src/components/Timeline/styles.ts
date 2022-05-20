@@ -1,11 +1,15 @@
 import styled from "styled-components"
 import { BarHandle } from "."
 
-interface TimelineWrapperProps {
+export const TimelineWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+`
+
+interface TimelineBackgroundProps {
   backgroundColor?: string
 }
-
-export const TimelineWrapper = styled.div<TimelineWrapperProps>`
+export const TimelineBackground = styled.div<TimelineBackgroundProps>`
   width: 100%;
   height: 100%;
   display: flex;

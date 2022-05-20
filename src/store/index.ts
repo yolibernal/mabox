@@ -1,6 +1,12 @@
+import { Mode } from "components/ModeDisplay"
 import L, { LatLngBounds } from "leaflet"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
+
+export const modeState = atom({
+  key: "modeState",
+  default: Mode.Map,
+})
 
 export const pictureConfigsState = atom({
   key: "pictureConfigsState",

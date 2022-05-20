@@ -1,8 +1,6 @@
 import { Gallery } from "components/Gallery"
 import { Header } from "components/Header"
-import { MaboxLogo } from "components/MaboxLogo"
 import { Map } from "components/Map"
-import { Timeline } from "components/Timeline"
 import { FunctionComponent, useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import {
@@ -15,7 +13,7 @@ import {
   showGalleryState,
   toYearState,
 } from "store"
-import { AppContainer } from "styles"
+import { AppContainer, ContentContainer } from "styles"
 import { useKeyboardShortcuts } from "useKeyboardShortcuts"
 
 export const AppViews: FunctionComponent = () => {
@@ -143,11 +141,8 @@ export const AppViews: FunctionComponent = () => {
   // return <StartScreen />
   return (
     <AppContainer>
-      <Header>
-        <MaboxLogo />
-        <Timeline />
-      </Header>
-      {showGallery ? <Gallery /> : <Map />}
+      <Header />
+      <ContentContainer>{showGallery ? <Gallery /> : <Map />}</ContentContainer>
     </AppContainer>
   )
 }

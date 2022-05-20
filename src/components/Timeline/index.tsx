@@ -1,7 +1,12 @@
 import React, { FunctionComponent } from "react"
 import { useRecoilValue } from "recoil"
 import { fromYearState, pictureYearRangeState, toYearState } from "store"
-import { CurrentBar, TimelineBar, TimelineWrapper } from "./styles"
+import {
+  CurrentBar,
+  TimelineBackground,
+  TimelineBar,
+  TimelineWrapper,
+} from "./styles"
 
 export enum BarHandle {
   Left = "left",
@@ -32,16 +37,18 @@ export const Timeline: FunctionComponent<Props> = () => {
   const notSelectedColor = "rgb(42, 100, 98)"
   const selectedColor = "rgb(80, 176, 172)"
   return (
-    <TimelineWrapper backgroundColor={notSelectedColor}>
-      <TimelineBar
-        backgroundColor={notSelectedColor}
-        widthPercent={cleanPercentage(preBar)}
-      />
-      <CurrentBar
-        backgroundColor={selectedColor}
-        widthPercent={cleanPercentage(bar) || 1}
-        selectedHandle={BarHandle.Left}
-      />
+    <TimelineWrapper>
+      <TimelineBackground backgroundColor={notSelectedColor}>
+        <TimelineBar
+          backgroundColor={notSelectedColor}
+          widthPercent={cleanPercentage(preBar)}
+        />
+        <CurrentBar
+          backgroundColor={selectedColor}
+          widthPercent={cleanPercentage(bar) || 1}
+          selectedHandle={BarHandle.Left}
+        />
+      </TimelineBackground>
     </TimelineWrapper>
   )
 }

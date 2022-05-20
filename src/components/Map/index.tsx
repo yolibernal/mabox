@@ -64,10 +64,10 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   const url = `https://api.mapbox.com/styles/v1/${username}/${styleId}/tiles/${tilesize}/{z}/{x}/{y}@2x?access_token=${accessToken}`
   return (
     <TileLayer
-      // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-      //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      url={url}
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      // url={url}
       zIndex={0}
     />
   )

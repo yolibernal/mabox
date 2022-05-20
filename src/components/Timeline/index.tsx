@@ -42,7 +42,9 @@ export const Timeline: FunctionComponent<Props> = () => {
   const barPercent = cleanPercentage(bar) || 1
   return (
     <TimelineWrapper>
-      <TimelineHandleYear widthPercent={prebarPercent}>1960</TimelineHandleYear>
+      <TimelineHandleYear widthPercent={prebarPercent}>
+        {fromYear}
+      </TimelineHandleYear>
       <TimelineBackground backgroundColor={notSelectedColor}>
         <TimelineBar
           backgroundColor={notSelectedColor}
@@ -55,7 +57,7 @@ export const Timeline: FunctionComponent<Props> = () => {
         />
       </TimelineBackground>
       <TimelineHandleYear widthPercent={prebarPercent + barPercent}>
-        1960
+        {toYear}
       </TimelineHandleYear>
     </TimelineWrapper>
   )

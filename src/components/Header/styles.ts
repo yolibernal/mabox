@@ -5,7 +5,7 @@ export const HeaderContainer = styled.div`
   flex-direction: row;
   justify-content: start;
   align-items: center;
-  height: 60px;
+  height: 75px;
   width: 100%;
 `
 
@@ -18,7 +18,7 @@ export const HeaderLogoContainer = styled.div`
 export const HeaderTimelineContainer = styled.div`
   height: 100%;
   flex-grow: 1;
-  padding: 15px 100px;
+  padding: 5px 100px;
 `
 
 export const HeaderModeDisplayContainer = styled.div``

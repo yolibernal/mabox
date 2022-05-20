@@ -4,14 +4,16 @@ import { BarHandle } from "."
 export const TimelineWrapper = styled.div`
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
 
 interface TimelineBackgroundProps {
   backgroundColor?: string
 }
 export const TimelineBackground = styled.div<TimelineBackgroundProps>`
-  width: 100%;
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -43,4 +45,11 @@ export const CurrentBar = styled(TimelineBar)<CurrentBarProps>`
     selectedHandle === BarHandle.Right
       ? "4px solid rgb(237,116,54)"
       : "2px solid black"};
+`
+
+export const TimelineHandleYear = styled.div<{
+  widthPercent: number
+}>`
+  padding-left: ${({ widthPercent }) => widthPercent}%;
+  font-size: 14px;
 `

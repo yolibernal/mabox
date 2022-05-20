@@ -5,6 +5,7 @@ import {
   CurrentBar,
   TimelineBackground,
   TimelineBar,
+  TimelineHandleYear,
   TimelineWrapper,
 } from "./styles"
 
@@ -36,19 +37,26 @@ export const Timeline: FunctionComponent<Props> = () => {
 
   const notSelectedColor = "rgb(42, 100, 98)"
   const selectedColor = "rgb(80, 176, 172)"
+
+  const prebarPercent = cleanPercentage(preBar)
+  const barPercent = cleanPercentage(bar) || 1
   return (
     <TimelineWrapper>
+      <TimelineHandleYear widthPercent={prebarPercent}>1960</TimelineHandleYear>
       <TimelineBackground backgroundColor={notSelectedColor}>
         <TimelineBar
           backgroundColor={notSelectedColor}
-          widthPercent={cleanPercentage(preBar)}
+          widthPercent={prebarPercent}
         />
         <CurrentBar
           backgroundColor={selectedColor}
-          widthPercent={cleanPercentage(bar) || 1}
+          widthPercent={barPercent}
           selectedHandle={BarHandle.Left}
         />
       </TimelineBackground>
+      <TimelineHandleYear widthPercent={prebarPercent + barPercent}>
+        1960
+      </TimelineHandleYear>
     </TimelineWrapper>
   )
 }

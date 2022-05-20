@@ -4,7 +4,6 @@ import { AppViews } from "AppViews"
 import GlobalStyle from "global-styles"
 import React from "react"
 import { RecoilRoot } from "recoil"
-import { AppContainer } from "styles"
 
 const App = () => {
   return (
@@ -12,9 +11,7 @@ const App = () => {
       <MantineProvider>
         <ModalsProvider>
           <GlobalStyle />
-          <AppContainer>
-            <AppViews />
-          </AppContainer>
+          <AppViews />
         </ModalsProvider>
       </MantineProvider>
     </RecoilRoot>

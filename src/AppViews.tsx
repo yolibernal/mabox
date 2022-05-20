@@ -1,4 +1,6 @@
 import { Gallery } from "components/Gallery"
+import { Header } from "components/Header"
+import { MaboxLogo } from "components/MaboxLogo"
 import { Map } from "components/Map"
 import { Timeline } from "components/Timeline"
 import { FunctionComponent, useEffect, useState } from "react"
@@ -13,6 +15,7 @@ import {
   showGalleryState,
   toYearState,
 } from "store"
+import { AppContainer } from "styles"
 import { useKeyboardShortcuts } from "useKeyboardShortcuts"
 
 export const AppViews: FunctionComponent = () => {
@@ -137,11 +140,14 @@ export const AppViews: FunctionComponent = () => {
     }
   }, [joyStickDirection, setMapCenter, mapBoundingBoxSize])
 
+  // return <StartScreen />
   return (
-    <>
-      <Timeline />
-
+    <AppContainer>
+      <Header>
+        <MaboxLogo />
+        <Timeline />
+      </Header>
       {showGallery ? <Gallery /> : <Map />}
-    </>
+    </AppContainer>
   )
 }

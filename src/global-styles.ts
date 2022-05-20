@@ -9,10 +9,10 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
-     /*
+  /*
   Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
-*/
+  */
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -30,7 +30,6 @@ const GlobalStyle = createGlobalStyle`
   img,
   picture,
   video,
-  canvas,
   svg {
     display: block;
     max-width: 100%;

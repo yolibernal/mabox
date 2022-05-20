@@ -1,4 +1,4 @@
-import L from "leaflet"
+import L, { LatLngBounds } from "leaflet"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
 
@@ -15,6 +15,11 @@ export const mapZoomState = atom({
 export const mapCenterState = atom({
   key: "mapCenterState",
   default: [49.0069, 8.4037] as L.LatLngExpression,
+})
+
+export const mapBoundingBoxState = atom<LatLngBounds | null>({
+  key: "mapBoundingBoxState",
+  default: null,
 })
 
 export const currentDateState = atom({
@@ -35,4 +40,9 @@ export const pictureTimeRangeState = selector({
 
     return [new Date(minDate), new Date(maxDate)] as [Date, Date]
   },
+})
+
+export const showGalleryState = atom({
+  key: "showGalleryState",
+  default: false,
 })

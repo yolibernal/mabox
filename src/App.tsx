@@ -1,7 +1,6 @@
 import { MantineProvider } from "@mantine/core"
 import { ModalsProvider } from "@mantine/modals"
-import Map from "components/Map"
-import { Timeline } from "components/Timeline"
+import { AppViews } from "AppViews"
 import GlobalStyle from "global-styles"
 import React from "react"
 import { RecoilRoot } from "recoil"
@@ -14,8 +13,7 @@ const App = () => {
         <ModalsProvider>
           <GlobalStyle />
           <AppContainer>
-            <Timeline />
-            <Map />
+            <AppViews />
           </AppContainer>
         </ModalsProvider>
       </MantineProvider>

@@ -7,4 +7,11 @@ export const MapWrapper = styled.div`
   & > * {
     flex: 1;
   }
+
+
+  style={{
+    position: 'relative'
+    width: 500,
+    height: 500
+  }}
 `

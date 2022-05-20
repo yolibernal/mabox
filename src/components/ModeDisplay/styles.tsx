@@ -1,5 +1,5 @@
+import { Mode } from "Mode"
 import styled from "styled-components"
-import { Mode } from "."
 
 export const ModeDisplayContainer = styled.div`
   width: 100%;

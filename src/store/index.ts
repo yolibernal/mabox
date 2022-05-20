@@ -1,5 +1,5 @@
-import { Mode } from "components/ModeDisplay"
 import L, { LatLngBounds } from "leaflet"
+import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
 
@@ -132,9 +132,4 @@ export const selectedPicturesState = selector({
     }
     return pictureConfigs
   },
-})
-
-export const showGalleryState = atom({
-  key: "showGalleryState",
-  default: false,
 })

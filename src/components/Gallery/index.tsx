@@ -1,13 +1,8 @@
 import React, { FunctionComponent, useState } from "react"
 import { useRecoilValue } from "recoil"
-import {
-  mapBoundingBoxState,
-  selectedPicturesState,
-  showGalleryState,
-} from "store"
+import { mapBoundingBoxState, selectedPicturesState } from "store"
 
 export const Gallery: FunctionComponent = () => {
-  const showGallery = useRecoilValue(showGalleryState)
   const mapBoundingBox = useRecoilValue(mapBoundingBoxState)
 
   const selectedPictures = useRecoilValue(selectedPicturesState)
@@ -15,8 +10,6 @@ export const Gallery: FunctionComponent = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   if (!mapBoundingBox) return null
-
-  if (!showGallery) return null
 
   if (selectedPictures.length === 0) return null
 

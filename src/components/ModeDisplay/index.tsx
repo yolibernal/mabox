@@ -1,11 +1,6 @@
+import { Mode } from "Mode"
 import { FunctionComponent } from "react"
 import { ModeContainer, ModeDisplayContainer } from "./styles"
-
-export enum Mode {
-  Map = "map",
-  Gallery = "gallery",
-  Slideshow = "slideshow",
-}
 
 interface Props {
   mode: Mode

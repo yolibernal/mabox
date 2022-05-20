@@ -1,4 +1,3 @@
-import { accessToken, styleId, tilesize, username } from "config/mapbox.config"
 import L from "leaflet"
 import "leaflet.heat"
 import { FunctionComponent, useEffect } from "react"
@@ -61,7 +60,7 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
     },
   })
 
-  const url = `https://api.mapbox.com/styles/v1/${username}/${styleId}/tiles/${tilesize}/{z}/{x}/{y}@2x?access_token=${accessToken}`
+  // const url = `https://api.mapbox.com/styles/v1/${username}/${styleId}/tiles/${tilesize}/{z}/{x}/{y}@2x?access_token=${accessToken}`
   return (
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

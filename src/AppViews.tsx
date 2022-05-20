@@ -1,6 +1,7 @@
 import { Gallery } from "components/Gallery"
 import { Header } from "components/Header"
 import { Map } from "components/Map"
+import { Mode } from "Mode"
 import { FunctionComponent, useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import {
@@ -10,14 +11,13 @@ import {
   mapBoundingBoxSizeState,
   mapCenterState,
   mapZoomState,
-  showGalleryState,
+  modeState,
   toYearState,
 } from "store"
 import { AppContainer, ContentContainer } from "styles"
 import { useKeyboardShortcuts } from "useKeyboardShortcuts"
 
 export const AppViews: FunctionComponent = () => {
-  const showGallery = useRecoilValue(showGalleryState)
   const [toYear, setToYear] = useRecoilState(toYearState)
   const [fromYear, setFromYear] = useRecoilState(fromYearState)
   const setMapZoom = useSetRecoilState(mapZoomState)
@@ -26,12 +26,16 @@ export const AppViews: FunctionComponent = () => {
   const [joyStickDirection, setJoyStickDirection] = useRecoilState(
     joyStickDirectionState
   )
-  const setShowGallery = useSetRecoilState(showGalleryState)
+  const [mode, setMode] = useRecoilState(modeState)
 
   useKeyboardShortcuts({
     g: (e) => {
       e.preventDefault()
-      setShowGallery((showGallery) => !showGallery)
+      if (mode === Mode.Gallery) {
+        setMode(Mode.Map)
+      } else {
+        setMode(Mode.Gallery)
+      }
     },
     j: (e) => {
       e.preventDefault()
@@ -142,7 +146,9 @@ export const AppViews: FunctionComponent = () => {
   return (
     <AppContainer>
       <Header />
-      <ContentContainer>{showGallery ? <Gallery /> : <Map />}</ContentContainer>
+      <ContentContainer>
+        {mode === Mode.Gallery ? <Gallery /> : <Map />}
+      </ContentContainer>
     </AppContainer>
   )
 }

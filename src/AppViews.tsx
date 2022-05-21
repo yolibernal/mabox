@@ -1,6 +1,7 @@
 import { Gallery } from "components/Gallery"
 import { Header } from "components/Header"
 import { Map } from "components/Map"
+import { Slideshow } from "components/Slideshow"
 import { Mode } from "Mode"
 import { FunctionComponent, useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -29,6 +30,14 @@ export const AppViews: FunctionComponent = () => {
   const [mode, setMode] = useRecoilState(modeState)
 
   useKeyboardShortcuts({
+    f: (e) => {
+      e.preventDefault()
+      if (mode === Mode.Slideshow) {
+        setMode(Mode.Map)
+      } else {
+        setMode(Mode.Slideshow)
+      }
+    },
     g: (e) => {
       e.preventDefault()
       if (mode === Mode.Gallery) {
@@ -147,7 +156,13 @@ export const AppViews: FunctionComponent = () => {
     <AppContainer>
       <Header />
       <ContentContainer>
-        {mode === Mode.Gallery ? <Gallery /> : <Map />}
+        {mode === Mode.Gallery ? (
+          <Gallery />
+        ) : mode === Mode.Slideshow ? (
+          <Slideshow />
+        ) : (
+          <Map />
+        )}
       </ContentContainer>
     </AppContainer>
   )

@@ -26,6 +26,10 @@ export const Slideshow: FunctionComponent = () => {
             currentPictureConfig.location.lat,
             currentPictureConfig.location.lng,
           ]}
+          markerPosition={[
+            currentPictureConfig.location.lat,
+            currentPictureConfig.location.lng,
+          ]}
         />
       </SlideshowMapContainer>
     </SlideshowContainer>

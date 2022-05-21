@@ -1,7 +1,13 @@
 import L from "leaflet"
 import "leaflet.heat"
 import { FunctionComponent, useEffect } from "react"
-import { MapContainer, TileLayer, useMap, useMapEvents } from "react-leaflet"
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import {
   mapBoundingBoxState,
@@ -17,6 +23,7 @@ interface MapLayerProps {
   mapCenter: L.LatLngExpression
   showHeatmap?: boolean
   transitionLatLng?: L.LatLngTuple
+  markerPosition?: L.LatLngTuple
 }
 
 const MapLayers: FunctionComponent<MapLayerProps> = ({
@@ -25,6 +32,7 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   mapCenter,
   showHeatmap = true,
   transitionLatLng,
+  markerPosition,
 }) => {
   const map = useMap()
   const setMapCenter = useSetRecoilState(mapCenterState)
@@ -71,24 +79,29 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
 
   // const url = `https://api.mapbox.com/styles/v1/${username}/${styleId}/tiles/${tilesize}/{z}/{x}/{y}@2x?access_token=${accessToken}`
   return (
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      // url={url}
-      zIndex={0}
-    />
+    <>
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        // url={url}
+        zIndex={0}
+      />
+      {markerPosition && <Marker position={markerPosition}></Marker>}
+    </>
   )
 }
 
 interface Props {
   showHeatmap?: boolean
   transitionLatLng?: L.LatLngTuple
+  markerPosition?: L.LatLngTuple
 }
 
 export const Map: FunctionComponent<Props> = ({
   showHeatmap = true,
   transitionLatLng,
+  markerPosition,
 }) => {
   const mapZoom = useRecoilValue(mapZoomState)
   const mapCenter = useRecoilValue(mapCenterState)
@@ -113,6 +126,7 @@ export const Map: FunctionComponent<Props> = ({
           mapZoom={mapZoom}
           mapCenter={mapCenter}
           transitionLatLng={transitionLatLng}
+          markerPosition={markerPosition}
         />
       </MapContainer>
     </MapWrapper>

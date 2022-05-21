@@ -101,30 +101,38 @@ export const AppViews: FunctionComponent = () => {
       if (message.device === Device.Joystick) {
         if (message.message === JoystickMessage.Pressed) {
           if (!appStarted) setAppStarted(true)
+          return
         }
 
         if (mode !== Mode.Map) return
 
         if (message.message === JoystickMessage.Top) {
           setJoyStickDirection(JoyStickDirection.Up)
+          return
         }
         if (message.message === JoystickMessage.Left) {
           setJoyStickDirection(JoyStickDirection.Left)
+          return
         }
         if (message.message === JoystickMessage.Right) {
           setJoyStickDirection(JoyStickDirection.Right)
+          return
         }
         if (message.message === JoystickMessage.Bottom) {
           setJoyStickDirection(JoyStickDirection.Down)
+          return
         }
         if (message.message === JoystickMessage.Center) {
           setJoyStickDirection(null)
+          return
         }
         if (message.message === JoystickMessage.Pressed) {
           if (selectedHandle === "LEFT") {
             setSelectedHandle("RIGHT")
+            return
           } else if (selectedHandle === "RIGHT") {
             setSelectedHandle("LEFT")
+            return
           }
         }
       }
@@ -132,14 +140,17 @@ export const AppViews: FunctionComponent = () => {
       if (message.device === Device.RotaryEncoder) {
         if (message.message === RotaryEncoderMessage.Pressed) {
           setZoomMode((zoomMode) => !zoomMode)
+          return
         }
 
         if (zoomMode) {
           if (message.message === RotaryEncoderMessage.Anticlockwise) {
             setMapZoom((mapZoom) => mapZoom - 1)
+            return
           }
           if (message.message === RotaryEncoderMessage.Clockwise) {
             setMapZoom((mapZoom) => mapZoom + 1)
+            return
           }
         }
 
@@ -151,20 +162,24 @@ export const AppViews: FunctionComponent = () => {
                 const newToYear = toYear - 1
                 if (newToYear < fromYear) return
                 setToYear(newToYear)
+                return
               }
               if (selectedHandle === "LEFT") {
                 if (!fromYear) return
                 setFromYear(fromYear - 1)
                 if (!fromYear) return
+                return
               }
             } else if (mode === Mode.Slideshow) {
               setSlideshowIndex((slideshowIndex) =>
                 Math.max(0, slideshowIndex - 1)
               )
+              return
             } else if (mode === Mode.Gallery) {
               setCurrentGalleryIndex((currentIndex) =>
                 Math.max(0, currentIndex - 1)
               )
+              return
             }
           }
           if (message.message === RotaryEncoderMessage.Clockwise) {
@@ -172,20 +187,24 @@ export const AppViews: FunctionComponent = () => {
               if (selectedHandle === "RIGHT") {
                 if (!toYear) return
                 setToYear(toYear + 1)
+                return
               }
               if (selectedHandle === "LEFT") {
                 const newFromYear = fromYear + 1
                 if (newFromYear > toYear) return
                 setFromYear(newFromYear)
+                return
               }
             } else if (mode === Mode.Slideshow) {
               setSlideshowIndex((slideshowIndex) =>
                 Math.min(slideshowIndex + 1, slideshowPictureConfigs.length - 1)
               )
+              return
             } else if (mode === Mode.Gallery) {
               setCurrentGalleryIndex((currentIndex) =>
                 Math.min(selectedPictures.length - 1, currentIndex + 1)
               )
+              return
             }
           }
         }
@@ -217,7 +236,7 @@ export const AppViews: FunctionComponent = () => {
       const message = JSON.parse(e.data)
       handleReceivedMessage(message)
     }
-  }, [websocket])
+  })
 
   useKeyboardShortcuts({
     z: (e) => {

@@ -52,7 +52,9 @@ export const AppViews: FunctionComponent = () => {
       e.preventDefault()
       if (mode === Mode.Map) {
         if (!toYear) return
-        setToYear(toYear - 1)
+        const newToYear = toYear - 1
+        if (newToYear < fromYear) return
+        setToYear(newToYear)
       } else if (mode === Mode.Slideshow) {
         setSlideshowIndex((slideshowIndex) => Math.max(0, slideshowIndex - 1))
       }
@@ -74,7 +76,9 @@ export const AppViews: FunctionComponent = () => {
     l: (e) => {
       e.preventDefault()
       if (!fromYear) return
-      setFromYear(fromYear + 1)
+      const newFromYear = fromYear + 1
+      if (newFromYear > toYear) return
+      setFromYear(newFromYear)
     },
     b: (e) => {
       e.preventDefault()

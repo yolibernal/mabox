@@ -144,54 +144,48 @@ export const AppViews: FunctionComponent = () => {
         }
 
         if (!zoomMode) {
-          if (selectedHandle === "RIGHT") {
-            if (message.message === RotaryEncoderMessage.Anticlockwise) {
-              if (mode === Mode.Map) {
+          if (message.message === RotaryEncoderMessage.Anticlockwise) {
+            if (mode === Mode.Map) {
+              if (selectedHandle === "RIGHT") {
                 if (!toYear) return
                 const newToYear = toYear - 1
                 if (newToYear < fromYear) return
                 setToYear(newToYear)
-              } else if (mode === Mode.Slideshow) {
-                setSlideshowIndex((slideshowIndex) =>
-                  Math.max(0, slideshowIndex - 1)
-                )
-              } else if (mode === Mode.Gallery) {
-                setCurrentGalleryIndex((currentIndex) =>
-                  Math.max(0, currentIndex - 1)
-                )
               }
-            }
-
-            if (message.message === RotaryEncoderMessage.Clockwise) {
-              if (mode === Mode.Map) {
-                if (!toYear) return
-                setToYear(toYear + 1)
-              } else if (mode === Mode.Slideshow) {
-                setSlideshowIndex((slideshowIndex) =>
-                  Math.min(
-                    slideshowIndex + 1,
-                    slideshowPictureConfigs.length - 1
-                  )
-                )
-              } else if (mode === Mode.Gallery) {
-                setCurrentGalleryIndex((currentIndex) =>
-                  Math.min(selectedPictures.length - 1, currentIndex + 1)
-                )
+              if (selectedHandle === "LEFT") {
+                if (!fromYear) return
+                setFromYear(fromYear - 1)
+                if (!fromYear) return
               }
+            } else if (mode === Mode.Slideshow) {
+              setSlideshowIndex((slideshowIndex) =>
+                Math.max(0, slideshowIndex - 1)
+              )
+            } else if (mode === Mode.Gallery) {
+              setCurrentGalleryIndex((currentIndex) =>
+                Math.max(0, currentIndex - 1)
+              )
             }
           }
-
-          if (selectedHandle === "LEFT") {
-            if (message.message === RotaryEncoderMessage.Anticlockwise) {
-              if (!fromYear) return
-              setFromYear(fromYear - 1)
-              if (!fromYear) return
-            }
-
-            if (message.message === RotaryEncoderMessage.Clockwise) {
-              const newFromYear = fromYear + 1
-              if (newFromYear > toYear) return
-              setFromYear(newFromYear)
+          if (message.message === RotaryEncoderMessage.Clockwise) {
+            if (mode === Mode.Map) {
+              if (selectedHandle === "RIGHT") {
+                if (!toYear) return
+                setToYear(toYear + 1)
+              }
+              if (selectedHandle === "LEFT") {
+                const newFromYear = fromYear + 1
+                if (newFromYear > toYear) return
+                setFromYear(newFromYear)
+              }
+            } else if (mode === Mode.Slideshow) {
+              setSlideshowIndex((slideshowIndex) =>
+                Math.min(slideshowIndex + 1, slideshowPictureConfigs.length - 1)
+              )
+            } else if (mode === Mode.Gallery) {
+              setCurrentGalleryIndex((currentIndex) =>
+                Math.min(selectedPictures.length - 1, currentIndex + 1)
+              )
             }
           }
         }

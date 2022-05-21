@@ -2,6 +2,7 @@ import L, { LatLngBounds } from "leaflet"
 import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
+import slideshowConfigsFile from "slideshow-configs.json"
 
 export const zoomModeState = atom({
   key: "zoomModeState",
@@ -41,7 +42,7 @@ export const pictureConfigsState = atom({
 // TODO: Add slidewshow configs
 export const slideshowPictureConfigsState = atom({
   key: "slideshowPictureConfigsState",
-  default: pictureConfigsState,
+  default: slideshowConfigsFile,
 })
 
 export const mapZoomState = atom({

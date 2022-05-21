@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { useRecoilValue } from "recoil"
 import { mapBoundingBoxState, selectedPicturesState } from "store"
+import { GalleryContainer, GalleryPicture } from "./styles"
 
 export const Gallery: FunctionComponent = () => {
   const mapBoundingBox = useRecoilValue(mapBoundingBoxState)
@@ -14,13 +15,7 @@ export const Gallery: FunctionComponent = () => {
   if (selectedPictures.length === 0) return null
 
   return (
-    <div>
-      <div>Gallery</div>
-      <img
-        style={{ width: "500px", height: "500px" }}
-        alt=""
-        src={selectedPictures[currentIndex].path}
-      />
+    <GalleryContainer>
       <div
         onClick={(e) => {
           e.stopPropagation()
@@ -29,6 +24,7 @@ export const Gallery: FunctionComponent = () => {
       >
         prev
       </div>
+      <GalleryPicture alt="" src={selectedPictures[currentIndex].path} />
       <div
         onClick={(e) => {
           e.stopPropagation()
@@ -39,6 +35,6 @@ export const Gallery: FunctionComponent = () => {
       >
         next
       </div>
-    </div>
+    </GalleryContainer>
   )
 }

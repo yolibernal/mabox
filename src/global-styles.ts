@@ -9,6 +9,12 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html,
+  body,
+  #root {
+    height: 100vh;
+  }
+
   /*
   Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
@@ -19,8 +25,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
   }
-  html,
-  body {
+  html {
     height: 100%;
   }
   body {

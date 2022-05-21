@@ -3,6 +3,11 @@ import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
 
+export const slideshowIndexState = atom({
+  key: "slideshowIndexState",
+  default: 0,
+})
+
 export const modeState = atom({
   key: "modeState",
   default: Mode.Map,
@@ -11,6 +16,12 @@ export const modeState = atom({
 export const pictureConfigsState = atom({
   key: "pictureConfigsState",
   default: pictureConfigsFile,
+})
+
+// TODO: Add slidewshow configs
+export const slideshowPictureConfigsState = atom({
+  key: "slideshowPictureConfigsState",
+  default: pictureConfigsState,
 })
 
 export const mapZoomState = atom({

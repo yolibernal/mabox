@@ -13,6 +13,7 @@ import {
   mapCenterState,
   mapZoomState,
   modeState,
+  slideshowIndexState,
   toYearState,
 } from "store"
 import { AppContainer, ContentContainer } from "styles"
@@ -23,6 +24,7 @@ export const AppViews: FunctionComponent = () => {
   const [fromYear, setFromYear] = useRecoilState(fromYearState)
   const setMapZoom = useSetRecoilState(mapZoomState)
   const setMapCenter = useSetRecoilState(mapCenterState)
+  const setSlideshowIndex = useSetRecoilState(slideshowIndexState)
   const mapBoundingBoxSize = useRecoilValue(mapBoundingBoxSizeState)
   const [joyStickDirection, setJoyStickDirection] = useRecoilState(
     joyStickDirectionState
@@ -48,13 +50,21 @@ export const AppViews: FunctionComponent = () => {
     },
     j: (e) => {
       e.preventDefault()
-      if (!toYear) return
-      setToYear(toYear - 1)
+      if (mode === Mode.Map) {
+        if (!toYear) return
+        setToYear(toYear - 1)
+      } else if (mode === Mode.Slideshow) {
+        setSlideshowIndex((slideshowIndex) => Math.max(0, slideshowIndex - 1))
+      }
     },
     k: (e) => {
       e.preventDefault()
-      if (!toYear) return
-      setToYear(toYear + 1)
+      if (mode === Mode.Map) {
+        if (!toYear) return
+        setToYear(toYear + 1)
+      } else if (mode === Mode.Slideshow) {
+        setSlideshowIndex((slideshowIndex) => slideshowIndex + 1)
+      }
     },
     h: (e) => {
       e.preventDefault()

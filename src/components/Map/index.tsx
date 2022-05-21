@@ -16,6 +16,7 @@ interface MapLayerProps {
   mapZoom: number
   mapCenter: L.LatLngExpression
   showHeatmap?: boolean
+  transitionLatLng?: L.LatLngTuple
 }
 
 const MapLayers: FunctionComponent<MapLayerProps> = ({
@@ -23,6 +24,7 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   mapZoom,
   mapCenter,
   showHeatmap = true,
+  transitionLatLng,
 }) => {
   const map = useMap()
   const setMapCenter = useSetRecoilState(mapCenterState)
@@ -34,8 +36,10 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
     setMapZoom(map.getZoom())
     setMapBoundingBox(map.getBounds())
   }
-
-  // map.flyTo(e.latlng, map.getZoom())
+  useEffect(() => {
+    if (!transitionLatLng) return
+    map.flyTo(transitionLatLng, map.getZoom())
+  }, [JSON.stringify(transitionLatLng), map])
 
   useEffect(() => {
     const layer = L.heatLayer(showHeatmap ? addressPoints : [], {}).addTo(map)
@@ -52,15 +56,16 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
     setMapBoundingBox(map.getBounds())
   }, [map, setMapBoundingBox, mapZoom, mapCenter])
 
+  // NOTE: uncomment to make mouse/keyboard controls work correctly
   useMapEvents({
     dragend: () => {
-      setMapState(map)
+      // setMapState(map)
     },
     zoom: () => {
-      setMapState(map)
+      // setMapState(map)
     },
     keydown: () => {
-      setMapState(map)
+      // setMapState(map)
     },
   })
 
@@ -78,9 +83,13 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
 
 interface Props {
   showHeatmap?: boolean
+  transitionLatLng?: L.LatLngTuple
 }
 
-export const Map: FunctionComponent<Props> = ({ showHeatmap = true }) => {
+export const Map: FunctionComponent<Props> = ({
+  showHeatmap = true,
+  transitionLatLng,
+}) => {
   const mapZoom = useRecoilValue(mapZoomState)
   const mapCenter = useRecoilValue(mapCenterState)
 
@@ -103,6 +112,7 @@ export const Map: FunctionComponent<Props> = ({ showHeatmap = true }) => {
           addressPoints={addressPoints}
           mapZoom={mapZoom}
           mapCenter={mapCenter}
+          transitionLatLng={transitionLatLng}
         />
       </MapContainer>
     </MapWrapper>

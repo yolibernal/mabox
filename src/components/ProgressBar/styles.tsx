@@ -1,7 +1,9 @@
 import { TimelineBar, TimelineWrapper } from "components/Timeline/styles"
 import styled from "styled-components"
 
-export const ProgressBarWrapper = styled(TimelineWrapper)``
+export const ProgressBarWrapper = styled(TimelineWrapper)`
+  padding: 20px 0;
+`
 
 export const ProgressBarLine = styled(TimelineBar)`
   display: flex;

@@ -13,6 +13,11 @@ export const modeState = atom({
   default: Mode.Map,
 })
 
+export const currentGalleryIndexState = atom({
+  key: "currentGalleryIndexState",
+  default: 0,
+})
+
 export const pictureConfigsState = atom({
   key: "pictureConfigsState",
   default: pictureConfigsFile,

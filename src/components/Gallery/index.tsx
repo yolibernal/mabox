@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react"
-import { useRecoilValue } from "recoil"
-import { mapBoundingBoxState, selectedPicturesState } from "store"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { currentGalleryIndexState, mapBoundingBoxState, selectedPicturesState } from "store"
 import { GalleryContainer, GalleryPicture } from "./styles"
 
 export const Gallery: FunctionComponent = () => {
@@ -8,7 +8,7 @@ export const Gallery: FunctionComponent = () => {
 
   const selectedPictures = useRecoilValue(selectedPicturesState)
 
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentGalleryIndex, setCurrentGalleryIndex] = useRecoilState(currentGalleryIndexState)
 
   if (!mapBoundingBox) return null
 
@@ -19,16 +19,16 @@ export const Gallery: FunctionComponent = () => {
       <div
         onClick={(e) => {
           e.stopPropagation()
-          setCurrentIndex((currentIndex) => Math.max(0, currentIndex - 1))
+          setCurrentGalleryIndex((currentIndex) => Math.max(0, currentIndex - 1))
         }}
       >
         prev
       </div>
-      <GalleryPicture alt="" src={selectedPictures[currentIndex].path} />
+      <GalleryPicture alt="" src={selectedPictures[currentGalleryIndex].path} />
       <div
         onClick={(e) => {
           e.stopPropagation()
-          setCurrentIndex((currentIndex) =>
+          setCurrentGalleryIndex((currentIndex) =>
             Math.min(selectedPictures.length - 1, currentIndex + 1)
           )
         }}

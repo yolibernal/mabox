@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react"
 import { useRecoilValue } from "recoil"
 import { fromYearState, pictureYearRangeState, toYearState } from "store"
+import { cleanPercentage } from "utils"
 import {
   CurrentBar,
   TimelineBackground,
@@ -28,18 +29,11 @@ export const Timeline: FunctionComponent<Props> = () => {
   const preBar = (fromYear - minPictureYear) / range
   const bar = (toYear - minPictureYear - (fromYear - minPictureYear)) / range
 
-  const cleanPercentage = (value: number) => {
-    let percentage = value * 100
-    percentage = Math.min(percentage, 100)
-    percentage = Math.max(percentage, 0)
-    return percentage
-  }
+  const prebarPercent = cleanPercentage(preBar)
+  const barPercent = cleanPercentage(bar) || 1
 
   const notSelectedColor = "rgb(42, 100, 98)"
   const selectedColor = "rgb(80, 176, 172)"
-
-  const prebarPercent = cleanPercentage(preBar)
-  const barPercent = cleanPercentage(bar) || 1
   return (
     <TimelineWrapper>
       <TimelineHandleYear widthPercent={prebarPercent}>

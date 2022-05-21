@@ -35,14 +35,15 @@ export const TimelineBar = styled.div<TimelineBarProps>`
 `
 interface CurrentBarProps {
   selectedHandle?: BarHandle
+  zoomMode?: boolean
 }
 export const CurrentBar = styled(TimelineBar)<CurrentBarProps>`
-  border-left: ${({ selectedHandle }) =>
-    selectedHandle === BarHandle.Left
+  border-left: ${({ selectedHandle, zoomMode }) =>
+    selectedHandle === BarHandle.Left && !zoomMode
       ? "4px solid rgb(237,116,54)"
       : "2px solid black"};
-  border-right: ${({ selectedHandle }) =>
-    selectedHandle === BarHandle.Right
+  border-right: ${({ selectedHandle, zoomMode }) =>
+    selectedHandle === BarHandle.Right && !zoomMode
       ? "4px solid rgb(237,116,54)"
       : "2px solid black"};
 `

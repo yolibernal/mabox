@@ -1,6 +1,11 @@
 import React, { FunctionComponent } from "react"
 import { useRecoilValue } from "recoil"
-import { fromYearState, pictureYearRangeState, toYearState } from "store"
+import {
+  fromYearState,
+  pictureYearRangeState,
+  toYearState,
+  zoomModeState,
+} from "store"
 import { cleanPercentage } from "utils"
 import {
   CurrentBar,
@@ -21,6 +26,7 @@ export const Timeline: FunctionComponent<Props> = () => {
   const pictureYearRange = useRecoilValue(pictureYearRangeState)
   const fromYear = useRecoilValue(fromYearState)
   const toYear = useRecoilValue(toYearState)
+  const zoomMode = useRecoilValue(zoomModeState)
 
   const [minPictureYear, maxPictureYear] = pictureYearRange
 
@@ -48,6 +54,7 @@ export const Timeline: FunctionComponent<Props> = () => {
           backgroundColor={selectedColor}
           widthPercent={barPercent}
           selectedHandle={BarHandle.Left}
+          zoomMode={zoomMode}
         />
       </TimelineBackground>
       <TimelineHandleYear widthPercent={prebarPercent + barPercent}>

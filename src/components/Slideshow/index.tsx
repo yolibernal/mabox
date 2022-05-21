@@ -14,7 +14,7 @@ export const Slideshow: FunctionComponent = () => {
         <GalleryPicture src="/pictures/Berlin/IMG_20211201_142820.jpg" />
       </SlideshowGalleryContainer>
       <SlideshowMapContainer>
-        <Map />
+        <Map showHeatmap={false} />
       </SlideshowMapContainer>
     </SlideshowContainer>
   )

@@ -15,12 +15,14 @@ interface MapLayerProps {
   addressPoints?: L.HeatLatLngTuple[]
   mapZoom: number
   mapCenter: L.LatLngExpression
+  showHeatmap?: boolean
 }
 
 const MapLayers: FunctionComponent<MapLayerProps> = ({
   addressPoints = [],
   mapZoom,
   mapCenter,
+  showHeatmap = true,
 }) => {
   const map = useMap()
   const setMapCenter = useSetRecoilState(mapCenterState)
@@ -33,12 +35,14 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
     setMapBoundingBox(map.getBounds())
   }
 
+  // map.flyTo(e.latlng, map.getZoom())
+
   useEffect(() => {
-    const layer = L.heatLayer(addressPoints, {}).addTo(map)
+    const layer = L.heatLayer(showHeatmap ? addressPoints : [], {}).addTo(map)
     return () => {
       map.removeLayer(layer)
     }
-  }, [addressPoints, map])
+  }, [addressPoints, map, showHeatmap])
 
   useEffect(() => {
     map.setView(mapCenter, mapZoom)
@@ -72,9 +76,11 @@ const MapLayers: FunctionComponent<MapLayerProps> = ({
   )
 }
 
-interface Props {}
+interface Props {
+  showHeatmap?: boolean
+}
 
-export const Map: FunctionComponent<Props> = () => {
+export const Map: FunctionComponent<Props> = ({ showHeatmap = true }) => {
   const mapZoom = useRecoilValue(mapZoomState)
   const mapCenter = useRecoilValue(mapCenterState)
 
@@ -93,6 +99,7 @@ export const Map: FunctionComponent<Props> = () => {
     <MapWrapper>
       <MapContainer center={mapCenter} zoom={mapZoom}>
         <MapLayers
+          showHeatmap={showHeatmap}
           addressPoints={addressPoints}
           mapZoom={mapZoom}
           mapCenter={mapCenter}

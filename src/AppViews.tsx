@@ -14,10 +14,11 @@ import {
   mapZoomState,
   modeState,
   slideshowIndexState,
-  toYearState,
+  toYearState
 } from "store"
 import { AppContainer, ContentContainer } from "styles"
 import { useKeyboardShortcuts } from "useKeyboardShortcuts"
+import { v4 as uuidv4 } from "uuid"
 
 export const AppViews: FunctionComponent = () => {
   const [toYear, setToYear] = useRecoilState(toYearState)
@@ -30,6 +31,64 @@ export const AppViews: FunctionComponent = () => {
     joyStickDirectionState
   )
   const [mode, setMode] = useRecoilState(modeState)
+  const [websocket, setWebsocket] = useState<WebSocket>()
+
+  useEffect(() => {
+    const myClientId = uuidv4()
+          //  (`ws://192.168.178.85:8000/ws/${client_id}`);
+    const url = `ws://192.168.178.85:8000/ws/${myClientId}`
+    const ws = new WebSocket(url)
+
+    ws.onopen = () => {
+      const connectMessage = {
+        clientId: myClientId,
+        type: "connected",
+      }
+      ws.send(JSON.stringify(connectMessage))
+    }
+
+    setWebsocket(ws)
+
+    return () => ws.close()
+  }, [])
+
+  useEffect(() => {
+    const handleReceivedMessage = (message: any) => {
+      console.log(message)
+      console.log(typeof message)
+      console.log(message.message)
+      if (message.message === "TOP") {
+
+      setJoyStickDirection(JoyStickDirection.Up)
+      }
+      //if (message.type === "solved") {
+      //  console.log("SOLVED by", message.user)
+      //  setStopTimer(true)
+      //}
+      //if (message.type === "timeout") {
+      //  console.log("TIMEOUTED by", message.user)
+      //  setResetTimer(true)
+      //}
+      //if (message.type === "new_round" && message.user) {
+      //  setCurrentUser(message.user)
+      //  setCurrentWord(message.word || null)
+      //  setResetTimer(true)
+      //  setStopTimer(false)
+      //}
+      //if (message.type === "new_commit") {
+      //  setLatestCommitId(message.message || null)
+      //}
+      //setMessages((messages) => [...messages, message])
+    }
+
+    if (!websocket) return
+
+    websocket.onmessage = (e: any) => {
+      console.log(e.data)
+      const message = JSON.parse(e.data)
+      handleReceivedMessage(message)
+    }
+  }, [websocket])
 
   useKeyboardShortcuts({
     f: (e) => {

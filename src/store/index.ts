@@ -3,6 +3,16 @@ import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
 
+export const zoomModeState = atom({
+  key: "zoomModeState",
+  default: false,
+})
+
+export const selectedHandleState = atom<"RIGHT" | "LEFT">({
+  key: "selectedHandleState",
+  default: "RIGHT",
+})
+
 export const appStartedState = atom({
   key: "appStartedState",
   default: false,

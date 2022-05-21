@@ -16,10 +16,12 @@ import {
   mapCenterState,
   mapZoomState,
   modeState,
+  selectedHandleState,
   selectedPicturesState,
   slideshowIndexState,
   slideshowPictureConfigsState,
   toYearState,
+  zoomModeState,
 } from "store"
 import { AppContainer, ContentContainer } from "styles"
 import { useKeyboardShortcuts } from "useKeyboardShortcuts"
@@ -34,6 +36,9 @@ export const AppViews: FunctionComponent = () => {
   const setCurrentGalleryIndex = useSetRecoilState(currentGalleryIndexState)
   const mapBoundingBoxSize = useRecoilValue(mapBoundingBoxSizeState)
   const [appStarted, setAppStarted] = useRecoilState(appStartedState)
+  const [zoomMode, setZoomMode] = useRecoilState(zoomModeState)
+  const [selectedHandle, setSelectedHandle] =
+    useRecoilState(selectedHandleState)
   const [joyStickDirection, setJoyStickDirection] = useRecoilState(
     joyStickDirectionState
   )
@@ -61,32 +66,154 @@ export const AppViews: FunctionComponent = () => {
     return () => ws.close()
   }, [])
 
+  enum Device {
+    Joystick = "JOYSTICK",
+    RotaryEncoder = "ROTARY_ENCODER",
+    Button1 = "BUTTON 1",
+    Button2 = "BUTTON 2",
+  }
+
+  enum JoystickMessage {
+    Center = "CENTER",
+    Right = "RIGHT",
+    Top = "TOP",
+    Left = "LEFT",
+    Bottom = "BOTTOM",
+    Pressed = "PRESSED",
+  }
+
+  enum RotaryEncoderMessage {
+    Clockwise = "CLOCKWISE",
+    Anticlockwise = "ANTICLOCKWISE",
+    Pressed = "PRESSED",
+  }
+
+  enum ButtonMessage {
+    Active = "ACTIVE",
+    Inactive = "INACTIVE",
+  }
+
   useEffect(() => {
-    const handleReceivedMessage = (message: any) => {
-      console.log(message)
-      console.log(typeof message)
-      console.log(message.message)
-      if (message.message === "TOP") {
-        setJoyStickDirection(JoyStickDirection.Up)
+    const handleReceivedMessage = (message: {
+      device: Device
+      message: JoystickMessage | RotaryEncoderMessage | ButtonMessage
+    }) => {
+      if (message.device === Device.Joystick) {
+        if (message.message === JoystickMessage.Pressed) {
+          if (!appStarted) setAppStarted(true)
+        }
+
+        if (mode !== Mode.Map) return
+
+        if (message.message === JoystickMessage.Top) {
+          setJoyStickDirection(JoyStickDirection.Up)
+        }
+        if (message.message === JoystickMessage.Left) {
+          setJoyStickDirection(JoyStickDirection.Left)
+        }
+        if (message.message === JoystickMessage.Right) {
+          setJoyStickDirection(JoyStickDirection.Right)
+        }
+        if (message.message === JoystickMessage.Bottom) {
+          setJoyStickDirection(JoyStickDirection.Down)
+        }
+        if (message.message === JoystickMessage.Center) {
+          setJoyStickDirection(null)
+        }
+        if (message.message === JoystickMessage.Pressed) {
+          if (selectedHandle === "LEFT") {
+            setSelectedHandle("RIGHT")
+          } else if (selectedHandle === "RIGHT") {
+            setSelectedHandle("LEFT")
+          }
+        }
       }
-      //if (message.type === "solved") {
-      //  console.log("SOLVED by", message.user)
-      //  setStopTimer(true)
-      //}
-      //if (message.type === "timeout") {
-      //  console.log("TIMEOUTED by", message.user)
-      //  setResetTimer(true)
-      //}
-      //if (message.type === "new_round" && message.user) {
-      //  setCurrentUser(message.user)
-      //  setCurrentWord(message.word || null)
-      //  setResetTimer(true)
-      //  setStopTimer(false)
-      //}
-      //if (message.type === "new_commit") {
-      //  setLatestCommitId(message.message || null)
-      //}
-      //setMessages((messages) => [...messages, message])
+
+      if (message.device === Device.RotaryEncoder) {
+        if (message.message === RotaryEncoderMessage.Pressed) {
+          setZoomMode((zoomMode) => !zoomMode)
+        }
+
+        if (zoomMode) {
+          if (message.message === RotaryEncoderMessage.Anticlockwise) {
+            setMapZoom((mapZoom) => mapZoom - 1)
+          }
+          if (message.message === RotaryEncoderMessage.Clockwise) {
+            setMapZoom((mapZoom) => mapZoom + 1)
+          }
+        }
+
+        if (!zoomMode) {
+          if (selectedHandle === "RIGHT") {
+            if (message.message === RotaryEncoderMessage.Anticlockwise) {
+              if (mode === Mode.Map) {
+                if (!toYear) return
+                const newToYear = toYear - 1
+                if (newToYear < fromYear) return
+                setToYear(newToYear)
+              } else if (mode === Mode.Slideshow) {
+                setSlideshowIndex((slideshowIndex) =>
+                  Math.max(0, slideshowIndex - 1)
+                )
+              } else if (mode === Mode.Gallery) {
+                setCurrentGalleryIndex((currentIndex) =>
+                  Math.max(0, currentIndex - 1)
+                )
+              }
+            }
+
+            if (message.message === RotaryEncoderMessage.Clockwise) {
+              if (mode === Mode.Map) {
+                if (!toYear) return
+                setToYear(toYear + 1)
+              } else if (mode === Mode.Slideshow) {
+                setSlideshowIndex((slideshowIndex) =>
+                  Math.min(
+                    slideshowIndex + 1,
+                    slideshowPictureConfigs.length - 1
+                  )
+                )
+              } else if (mode === Mode.Gallery) {
+                setCurrentGalleryIndex((currentIndex) =>
+                  Math.min(selectedPictures.length - 1, currentIndex + 1)
+                )
+              }
+            }
+          }
+
+          if (selectedHandle === "LEFT") {
+            if (message.message === RotaryEncoderMessage.Anticlockwise) {
+              if (!fromYear) return
+              setFromYear(fromYear - 1)
+              if (!fromYear) return
+            }
+
+            if (message.message === RotaryEncoderMessage.Clockwise) {
+              const newFromYear = fromYear + 1
+              if (newFromYear > toYear) return
+              setFromYear(newFromYear)
+            }
+          }
+        }
+      }
+
+      if (message.device === Device.Button1) {
+        if (message.message === ButtonMessage.Active) {
+          setMode(Mode.Slideshow)
+        }
+        if (message.message === ButtonMessage.Inactive) {
+          setMode(Mode.Map)
+        }
+      }
+
+      if (message.device === Device.Button2) {
+        if (message.message === ButtonMessage.Active) {
+          setMode(Mode.Gallery)
+        }
+        if (message.message === ButtonMessage.Inactive) {
+          setMode(Mode.Map)
+        }
+      }
     }
 
     if (!websocket) return

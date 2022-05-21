@@ -8,6 +8,10 @@ export const StartScreenContainer = styled.div`
   align-items: center;
 `
 
+export const StartScreenLogoContainer = styled.div`
+  height: 20%;
+`
+
 export const InitializationBox = styled.div`
   width: 500px;
   height: 500px;
@@ -18,5 +22,5 @@ export const InitializationBox = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  padding: 50px;
+  padding: 150px 50px;
 `

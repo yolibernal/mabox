@@ -2,7 +2,11 @@ import { MaboxLogo } from "components/MaboxLogo"
 import React, { FunctionComponent } from "react"
 import Particles from "react-tsparticles"
 import { loadFull } from "tsparticles"
-import { InitializationBox, StartScreenContainer } from "./styles"
+import {
+  InitializationBox,
+  StartScreenContainer,
+  StartScreenLogoContainer,
+} from "./styles"
 
 export const StartScreen: FunctionComponent = () => {
   return (
@@ -77,8 +81,10 @@ export const StartScreen: FunctionComponent = () => {
           detectRetina: true,
         }}
       />
-      <MaboxLogo />
-      <InitializationBox>Press ___ to initialize</InitializationBox>
+      <StartScreenLogoContainer>
+        <MaboxLogo />
+      </StartScreenLogoContainer>
+      <InitializationBox>Press JOYSTICK to initialize...</InitializationBox>
     </StartScreenContainer>
   )
 }

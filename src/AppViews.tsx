@@ -2,10 +2,13 @@ import { Gallery } from "components/Gallery"
 import { Header } from "components/Header"
 import { Map } from "components/Map"
 import { Slideshow } from "components/Slideshow"
+import { StartScreen } from "components/StartScreen"
 import { Mode } from "Mode"
 import { FunctionComponent, useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import {
+  appStartedState,
+  currentGalleryIndexState,
   fromYearState,
   JoyStickDirection,
   joyStickDirectionState,
@@ -13,7 +16,9 @@ import {
   mapCenterState,
   mapZoomState,
   modeState,
+  selectedPicturesState,
   slideshowIndexState,
+  slideshowPictureConfigsState,
   toYearState,
 } from "store"
 import { AppContainer, ContentContainer } from "styles"
@@ -25,13 +30,21 @@ export const AppViews: FunctionComponent = () => {
   const setMapZoom = useSetRecoilState(mapZoomState)
   const setMapCenter = useSetRecoilState(mapCenterState)
   const setSlideshowIndex = useSetRecoilState(slideshowIndexState)
+  const setCurrentGalleryIndex = useSetRecoilState(currentGalleryIndexState)
   const mapBoundingBoxSize = useRecoilValue(mapBoundingBoxSizeState)
+  const [appStarted, setAppStarted] = useRecoilState(appStartedState)
   const [joyStickDirection, setJoyStickDirection] = useRecoilState(
     joyStickDirectionState
   )
+  const slideshowPictureConfigs = useRecoilValue(slideshowPictureConfigsState)
+  const selectedPictures = useRecoilValue(selectedPicturesState)
   const [mode, setMode] = useRecoilState(modeState)
 
   useKeyboardShortcuts({
+    z: (e) => {
+      e.preventDefault()
+      setAppStarted(true)
+    },
     f: (e) => {
       e.preventDefault()
       if (mode === Mode.Slideshow) {
@@ -57,6 +70,8 @@ export const AppViews: FunctionComponent = () => {
         setToYear(newToYear)
       } else if (mode === Mode.Slideshow) {
         setSlideshowIndex((slideshowIndex) => Math.max(0, slideshowIndex - 1))
+      } else if (mode === Mode.Gallery) {
+        setCurrentGalleryIndex((currentIndex) => Math.max(0, currentIndex - 1))
       }
     },
     k: (e) => {
@@ -65,7 +80,13 @@ export const AppViews: FunctionComponent = () => {
         if (!toYear) return
         setToYear(toYear + 1)
       } else if (mode === Mode.Slideshow) {
-        setSlideshowIndex((slideshowIndex) => slideshowIndex + 1)
+        setSlideshowIndex((slideshowIndex) =>
+          Math.min(slideshowIndex + 1, slideshowPictureConfigs.length - 1)
+        )
+      } else if (mode === Mode.Gallery) {
+        setCurrentGalleryIndex((currentIndex) =>
+          Math.min(selectedPictures.length - 1, currentIndex + 1)
+        )
       }
     },
     h: (e) => {
@@ -165,7 +186,9 @@ export const AppViews: FunctionComponent = () => {
     }
   }, [joyStickDirection, setMapCenter, mapBoundingBoxSize])
 
-  // return <StartScreen />
+  if (!appStarted) {
+    return <StartScreen />
+  }
   return (
     <AppContainer>
       <Header />

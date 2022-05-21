@@ -3,6 +3,11 @@ import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
 import { atom, selector } from "recoil"
 
+export const appStartedState = atom({
+  key: "appStartedState",
+  default: false,
+})
+
 export const slideshowIndexState = atom({
   key: "slideshowIndexState",
   default: 0,

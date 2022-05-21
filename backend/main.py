@@ -11,6 +11,7 @@ import board
 import busio
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+import json
 
 
 app = FastAPI()
@@ -68,7 +69,6 @@ html = """
 """
 
 broadcast_queue = []
-
 
 """
 BUTTON Setup
@@ -183,15 +183,19 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
+    async def disconnect(self, websocket: WebSocket):
+        await websocket.close()
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message, websocket: WebSocket):
-        await websocket.send_json(message)
+        await websocket.send_text(message)
 
     async def broadcast(self, message):
         for connection in self.active_connections:
-            await connection.send_json(message)
+            try:
+                await connection.send_text(message)
+            except:
+                print("Could not broadcast to websocket")
 
 
 manager = ConnectionManager()
@@ -203,28 +207,29 @@ async def get():
     return HTMLResponse(html)
 
 
+t1 = threading.Thread(target=get_button_state)
+t2 = threading.Thread(target=rotary_encoder.watch)
+t3 = threading.Thread(target=get_joystick_state)
+t1.daemon = True
+t2.daemon = True
+t3.daemon = True
+t1.start()
+t2.start()
+t3.start()
+
 @app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
+async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket)
-    t1 = threading.Thread(target=get_button_state)
-    t2 = threading.Thread(target=rotary_encoder.watch)
-    t3 = threading.Thread(target=get_joystick_state)
-    t1.daemon = True
-    t2.daemon = True
-    t3.daemon = True
-    t1.start()
-    t2.start()
-    t3.start()
+
     try:
         while True:
             await asyncio.sleep(0.01)
             if len(broadcast_queue) == 0:
                 continue
-            await manager.broadcast(str(broadcast_queue[0]))
+            await manager.broadcast(json.dumps(broadcast_queue[0]))
             broadcast_queue.pop(0)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat")
 
 

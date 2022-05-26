@@ -1,3 +1,4 @@
+import { BarHandle } from "components/Timeline"
 import L, { LatLngBounds } from "leaflet"
 import { Mode } from "Mode"
 import pictureConfigsFile from "picture-configs.json"
@@ -9,9 +10,9 @@ export const zoomModeState = atom({
   default: false,
 })
 
-export const selectedHandleState = atom<"RIGHT" | "LEFT">({
+export const selectedHandleState = atom<BarHandle>({
   key: "selectedHandleState",
-  default: "RIGHT",
+  default: BarHandle.Right,
 })
 
 export const appStartedState = atom({

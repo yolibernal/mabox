@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil"
 import {
   fromYearState,
   pictureYearRangeState,
+  selectedHandleState,
   toYearState,
   zoomModeState,
 } from "store"
@@ -16,8 +17,8 @@ import {
 } from "./styles"
 
 export enum BarHandle {
-  Left = "left",
-  Right = "right",
+  Left = "LEFT",
+  Right = "RIGHT",
 }
 
 interface Props {}
@@ -40,6 +41,7 @@ export const Timeline: FunctionComponent<Props> = () => {
 
   const notSelectedColor = "rgb(42, 100, 98)"
   const selectedColor = "rgb(80, 176, 172)"
+  const selectedHandle = useRecoilValue(selectedHandleState)
   return (
     <TimelineWrapper>
       <TimelineHandleYear widthPercent={prebarPercent}>
@@ -53,7 +55,7 @@ export const Timeline: FunctionComponent<Props> = () => {
         <CurrentBar
           backgroundColor={selectedColor}
           widthPercent={barPercent}
-          selectedHandle={BarHandle.Left}
+          selectedHandle={selectedHandle}
           zoomMode={zoomMode}
         />
       </TimelineBackground>

@@ -3,6 +3,7 @@ import { Header } from "components/Header"
 import { Map } from "components/Map"
 import { Slideshow } from "components/Slideshow"
 import { StartScreen } from "components/StartScreen"
+import { BarHandle } from "components/Timeline"
 import { Mode } from "Mode"
 import { FunctionComponent, useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -101,7 +102,6 @@ export const AppViews: FunctionComponent = () => {
       if (message.device === Device.Joystick) {
         if (message.message === JoystickMessage.Pressed) {
           if (!appStarted) setAppStarted(true)
-          return
         }
 
         if (mode !== Mode.Map) return
@@ -127,11 +127,11 @@ export const AppViews: FunctionComponent = () => {
           return
         }
         if (message.message === JoystickMessage.Pressed) {
-          if (selectedHandle === "LEFT") {
-            setSelectedHandle("RIGHT")
+          if (selectedHandle === BarHandle.Left) {
+            setSelectedHandle(BarHandle.Right)
             return
-          } else if (selectedHandle === "RIGHT") {
-            setSelectedHandle("LEFT")
+          } else if (selectedHandle === BarHandle.Right) {
+            setSelectedHandle(BarHandle.Left)
             return
           }
         }
@@ -157,17 +157,12 @@ export const AppViews: FunctionComponent = () => {
         if (!zoomMode) {
           if (message.message === RotaryEncoderMessage.Anticlockwise) {
             if (mode === Mode.Map) {
-              if (selectedHandle === "RIGHT") {
-                if (!toYear) return
-                const newToYear = toYear - 1
-                if (newToYear < fromYear) return
-                setToYear(newToYear)
+              if (selectedHandle === BarHandle.Right) {
+                setToYear((toYear) => toYear - 1)
                 return
               }
-              if (selectedHandle === "LEFT") {
-                if (!fromYear) return
-                setFromYear(fromYear - 1)
-                if (!fromYear) return
+              if (selectedHandle === BarHandle.Left) {
+                setFromYear((fromYear) => fromYear - 1)
                 return
               }
             } else if (mode === Mode.Slideshow) {
@@ -184,15 +179,13 @@ export const AppViews: FunctionComponent = () => {
           }
           if (message.message === RotaryEncoderMessage.Clockwise) {
             if (mode === Mode.Map) {
-              if (selectedHandle === "RIGHT") {
+              if (selectedHandle === BarHandle.Right) {
                 if (!toYear) return
-                setToYear(toYear + 1)
+                setToYear((toYear) => toYear + 1)
                 return
               }
-              if (selectedHandle === "LEFT") {
-                const newFromYear = fromYear + 1
-                if (newFromYear > toYear) return
-                setFromYear(newFromYear)
+              if (selectedHandle === BarHandle.Left) {
+                setFromYear((fromYear) => fromYear + 1)
                 return
               }
             } else if (mode === Mode.Slideshow) {
@@ -236,7 +229,31 @@ export const AppViews: FunctionComponent = () => {
       const message = JSON.parse(e.data)
       handleReceivedMessage(message)
     }
-  })
+  }, [
+    websocket,
+    mode,
+    selectedHandle,
+    fromYear,
+    toYear,
+    zoomMode,
+    appStarted,
+    selectedPictures,
+    slideshowPictureConfigs,
+    ButtonMessage,
+    Device,
+    JoystickMessage,
+    RotaryEncoderMessage,
+    setAppStarted,
+    setCurrentGalleryIndex,
+    setFromYear,
+    setJoyStickDirection,
+    setMapZoom,
+    setMode,
+    setSelectedHandle,
+    setSlideshowIndex,
+    setToYear,
+    setZoomMode,
+  ])
 
   useKeyboardShortcuts({
     z: (e) => {

@@ -1,4 +1,6 @@
 resources/
+public/pictures/
+src/config/
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
@@ -23,3 +25,29 @@ resources/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.idea
+.ipynb_checkpoints
+.mypy_cache
+.vscode
+__pycache__
+.pytest_cache
+htmlcov
+dist
+site
+.coverage
+coverage.xml
+.netlify
+test.db
+log.txt
+Pipfile.lock
+env3.*
+env
+docs_build
+venv
+docs.zip
+archive.zip
+
+# vim temporary files
+*~
+.*.sw?

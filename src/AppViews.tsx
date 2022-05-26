@@ -143,20 +143,13 @@ export const AppViews: FunctionComponent = () => {
           return
         }
 
-        if (zoomMode) {
-          if (message.message === RotaryEncoderMessage.Anticlockwise) {
-            setMapZoom((mapZoom) => mapZoom - 1)
-            return
-          }
-          if (message.message === RotaryEncoderMessage.Clockwise) {
-            setMapZoom((mapZoom) => mapZoom + 1)
-            return
-          }
-        }
-
-        if (!zoomMode) {
-          if (message.message === RotaryEncoderMessage.Anticlockwise) {
-            if (mode === Mode.Map) {
+        if (message.message === RotaryEncoderMessage.Anticlockwise) {
+          if (mode === Mode.Map) {
+            if (zoomMode) {
+              setMapZoom((mapZoom) => mapZoom - 1)
+              return
+            }
+            if (!zoomMode) {
               if (selectedHandle === BarHandle.Right) {
                 setToYear((toYear) => toYear - 1)
                 return
@@ -165,20 +158,26 @@ export const AppViews: FunctionComponent = () => {
                 setFromYear((fromYear) => fromYear - 1)
                 return
               }
-            } else if (mode === Mode.Slideshow) {
-              setSlideshowIndex((slideshowIndex) =>
-                Math.max(0, slideshowIndex - 1)
-              )
-              return
-            } else if (mode === Mode.Gallery) {
-              setCurrentGalleryIndex((currentIndex) =>
-                Math.max(0, currentIndex - 1)
-              )
+            }
+          } else if (mode === Mode.Slideshow) {
+            setSlideshowIndex((slideshowIndex) =>
+              Math.max(0, slideshowIndex - 1)
+            )
+            return
+          } else if (mode === Mode.Gallery) {
+            setCurrentGalleryIndex((currentIndex) =>
+              Math.max(0, currentIndex - 1)
+            )
+            return
+          }
+        }
+        if (message.message === RotaryEncoderMessage.Clockwise) {
+          if (mode === Mode.Map) {
+            if (zoomMode) {
+              setMapZoom((mapZoom) => mapZoom + 1)
               return
             }
-          }
-          if (message.message === RotaryEncoderMessage.Clockwise) {
-            if (mode === Mode.Map) {
+            if (!zoomMode) {
               if (selectedHandle === BarHandle.Right) {
                 if (!toYear) return
                 setToYear((toYear) => toYear + 1)
@@ -188,17 +187,17 @@ export const AppViews: FunctionComponent = () => {
                 setFromYear((fromYear) => fromYear + 1)
                 return
               }
-            } else if (mode === Mode.Slideshow) {
-              setSlideshowIndex((slideshowIndex) =>
-                Math.min(slideshowIndex + 1, slideshowPictureConfigs.length - 1)
-              )
-              return
-            } else if (mode === Mode.Gallery) {
-              setCurrentGalleryIndex((currentIndex) =>
-                Math.min(selectedPictures.length - 1, currentIndex + 1)
-              )
-              return
             }
+          } else if (mode === Mode.Slideshow) {
+            setSlideshowIndex((slideshowIndex) =>
+              Math.min(slideshowIndex + 1, slideshowPictureConfigs.length - 1)
+            )
+            return
+          } else if (mode === Mode.Gallery) {
+            setCurrentGalleryIndex((currentIndex) =>
+              Math.min(selectedPictures.length - 1, currentIndex + 1)
+            )
+            return
           }
         }
       }
